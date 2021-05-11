@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="../Public/css/style.css">
+        
+     
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<script src="./citysdk.js"></script>
+
+        <script src="../Public/data/slumpop.geojson"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>Slum Population Of India</title>
+    </head>
+<body class="body">
+       
+<div class="years">
+    <h4 class="head">Year</h4>
+    <div>
+    <input type="radio" id="2011" name="year" value="2011" onclick="radioButton()">
+    <label for="2011">2011</label>
+    </div>
+
+    <div>
+    <input type="radio" id="2012" name="year" value="2012" onclick="radioButton()">
+    <label for="2012">2012</label>
+    </div>
+
+    <div>
+    <input type="radio" id="2013" name="year" value="2013" onclick="radioButton()">
+    <label for="2013">2013</label>
+    </div>
+
+    <div>
+    <input type="radio" id="2014" name="year" value="2014" onclick="radioButton()">
+    <label for="2014">2014</label>
+    </div>
+
+    <div>
+    <input type="radio" id="2015" name="year" value="2015" onclick="radioButton()">
+    <label for="2015">2015</label>
+    </div>
+
+    <div>
+    <input type="radio" id="2016" name="year" value="2016" onclick="radioButton()">
+    <label for="2016">2016</label>
+    </div>
+
+    <div>
+    <input type="radio" id="2017" name="year" value="2017" onclick="radioButton()" checked>
+    <label for="2017">2017</label>
+    </div>
+</div>
+<div id="map" class="map">
+    
+</div>
+<script type="text/javascript">
+
+var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[6.143764917121963,61.8817880605193],[42.85477184167639,94.10680871290283]]);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+
+    tileSize: 512,
+    zoomOffset: -1
+}).addTo(map);
+
+
+L.geoJson(stateData).addTo(map);
+
+var year=2017;
+function radioButton() {    
+    if(document.getElementById('2011').checked) {   
+         year=2011;
+    }   
+    else if(document.getElementById('2012').checked) {   
+        year=2012;
+    }   
+    else if(document.getElementById('2013').checked) {   
+        year=2013;
+    }   
+    else if(document.getElementById('2014').checked) {   
+        year=2014;
+    } 
+    else if(document.getElementById('2015').checked) {   
+        year=2015;
+    }  
+    else if(document.getElementById('2016').checked) {   
+        year=2016;
+    }  
+    else if(document.getElementById('2017').checked) {   
+        year=2017;
+    }  
+    else {   
+        year=2017;
+    }  
+    
+    L.geoJson(stateData, {style: style}).addTo(map);
+    geojson = L.geoJson(stateData, {
+        style: style,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+    var info = L.control();
+    info.addTo(map);
+    info.update();
+}   
+
+
+function getColor(d) {
+    
+    return d > 7500000 ? '#800026' :
+           d > 4000000  ? '#BD0026' :
+           d > 1500000  ? '#E31A1C' :
+           d > 500000 ? '#FC4E2A' :
+           d > 150000   ? '#FD8D3C' :
+           d > 75000   ? '#FEB24C' :
+           d > 1000   ? '#FED976' :
+                      '#FFEDA0';
+}
+
+
+function style(feature) {
+    if(year==2011){
+        return {
+            fillColor: getColor(feature.properties.a_2011),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+    else if(year==2016){
+        return {
+            fillColor: getColor(feature.properties.a_2016),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+    else if(year==2015){
+        return {
+            fillColor: getColor(feature.properties.a_2015),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+    else if(year==2014){
+        return {
+            fillColor: getColor(feature.properties.a_2014),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+    else if(year==2013){
+        return {
+            fillColor: getColor(feature.properties.a_2013),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+    else if(year==2012){
+        return {
+            fillColor: getColor(feature.properties.a_2012),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+    else{
+        return {
+            fillColor: getColor(feature.properties.a_2017),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+}
+
+L.geoJson(stateData, {style: style}).addTo(map);
+
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+    info.update(layer.feature.properties);
+}       
+
+var geojson;
+// ... our listeners
+geojson = L.geoJson(stateData);
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    info.update();
+}
+
+
+function zoomToFeature(e) {
+    map.fitBounds(e.target.getBounds());
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+
+geojson = L.geoJson(stateData, {
+    style: style,
+    onEachFeature: onEachFeature
+}).addTo(map);
+
+
+//=-------------------- custom info control---------------
+
+
+var info = L.control();
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    if(year==2011){
+        this._div.innerHTML = '<h4>India - Slum Population in 2011</h4>' +  (props ? 
+        '<b>' + props.ST_NAME + '</b><br />' + props.a_2011 + ' peoples</sup>'
+        : 'Hover over a state');
+    }
+    else if(year==2012){
+        this._div.innerHTML = '<h4>India - Slum Population in 2012</h4>' +  (props ? 
+        '<b>' + props.ST_NAME + '</b><br />' + props.a_2012 + ' peoples</sup>'
+        : 'Hover over a state');
+    }
+    else if(year==2013){
+        this._div.innerHTML = '<h4>India - Slum Population in 2013</h4>' +  (props ? 
+        '<b>' + props.ST_NAME + '</b><br />' + props.a_2013 + ' peoples</sup>'
+        : 'Hover over a state');
+    }
+    else if(year==2014){
+        this._div.innerHTML = '<h4>India - Slum Population in 2014</h4>' +  (props ? 
+        '<b>' + props.ST_NAME + '</b><br />' + props.a_2014 + ' peoples</sup>'
+        : 'Hover over a state');
+    }
+    else if(year==2015){
+    this._div.innerHTML = '<h4>India - Slum Population in 2015</h4>' +  (props ? 
+        '<b>' + props.ST_NAME + '</b><br />' + props.a_2015 + ' peoples</sup>'
+        : 'Hover over a state');
+    }
+    else if(year==2016){
+        this._div.innerHTML = '<h4>India - Slum Population in 2016</h4>' +  (props ? 
+        '<b>'+ props.year + props.ST_NAME + '</b><br />' + props.a_2016 + ' peoples</sup>'
+        : 'Hover over a state');
+    }
+    else{
+    this._div.innerHTML = '<h4>India - Slum Population in 2017</h4>' +  (props ? 
+        '<b>' + props.ST_NAME + '</b><br />' + props.a_2017 + ' peoples</sup>'
+        : 'Hover over a state');
+    }
+};
+
+info.addTo(map);
+
+
+
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [21000000, 7500000 , 4000000 , 1500000, 500000  , 150000  , 75000, 1000]
+         labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length -1 ; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(map);
+
+
+
+
+
+
+
+
+    </script>
+
+    
+</body>
